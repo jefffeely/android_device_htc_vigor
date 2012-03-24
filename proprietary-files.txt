@@ -1,6 +1,6 @@
 # Executable files
 bin/awb_camera
-bin/bltd
+bin/btld
 bin/charging
 bin/dmagent
 bin/htc_ebdlogd
