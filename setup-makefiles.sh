@@ -38,7 +38,6 @@ MAKEFILE=../../../$OUTDIR/$DEVICE-vendor-blobs.mk
 
 # Prebuilt libraries that are needed to build open-source libraries
 PRODUCT_COPY_FILES += \\
-  $OUTDIR/proprietary/lib/libacdbmapper.so:obj/lib/libacdbmapper.so \\
   $OUTDIR/proprietary/lib/libaudioalsa.so:obj/lib/libaudioalsa.so \\
   $OUTDIR/proprietary/lib/libril.so:obj/lib/libril.so \\
 
