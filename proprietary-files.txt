@@ -80,7 +80,6 @@ lib/libaudcal.so
 lib/libC2D2.so
 lib/libcamerapp.so
 lib/libcameraface.so
-lib/libcameraservice.so
 lib/libdiag.so
 lib/libidl.so
 lib/libdsi_netctrl.so
