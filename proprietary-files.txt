@@ -6,6 +6,7 @@ bin/load-modem.sh
 bin/logcat2
 bin/mpdecision
 bin/netmgrd
+bin/rild
 bin/rmt_storage
 bin/qmuxd
 bin/thermald
@@ -70,6 +71,9 @@ lib/libqdp.so
 lib/libqmi.so
 lib/libqmiservices.so
 lib/libv8.so
+lib/libril-qc-qmi-1.so
+lib/libril-qcril-hook-oem.so
+lib/libril.so
 
 
 # Hardware files
