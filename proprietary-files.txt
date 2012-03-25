@@ -19,26 +19,6 @@ etc/agps_rm
 etc/thermald.conf
 etc/vpimg
 
-# Camera Files
-lib/libchromatix_imx105_default_video.so
-lib/libchromatix_imx105_preview.so
-lib/libchromatix_imx105_zsl.so
-lib/libchromatix_mt9d015_default_video.so
-lib/libchromatix_mt9d015_default_zsl.so
-lib/libchromatix_mt9d015_preview.so
-lib/libchromatix_ov8830_default_video.so
-lib/libchromatix_ov8830_hfr.so
-lib/libchromatix_ov8830_preview.so
-lib/libchromatix_ov8830_zsl.so
-lib/libchromatix_s5k3h1gx_default_video.so
-lib/libchromatix_s5k3h1gx_hfr.so
-lib/libchromatix_s5k3h1gx_preview.so
-lib/libchromatix_s5k3h1gx_zsl.so
-lib/libchromatix_s5k3h2yx_default_video.so
-lib/libchromatix_s5k3h2yx_hfr.so
-lib/libchromatix_s5k3h2yx_preview.so
-lib/libchromatix_s5k3h2yx_zsl.so
-
 # Codec configs
 etc/AdieHWCodec.csv
 etc/AdieHWCodec_BEATS_HW.csv
@@ -47,17 +27,6 @@ etc/AIC3254_REG_DualMic.csv
 etc/AudioBTID.csv
 etc/CodecDSPID.txt
 etc/TPA2051_CFG.csv
-
-# Soundimage
-etc/soundimage/Sound_Original.txt
-etc/soundimage/srs_bypass.cfg
-etc/soundimage/srs_geq10.cfg
-etc/soundimage/srs_global.cfg
-etc/soundimage/srsfx_trumedia_51.cfg
-etc/soundimage/srsfx_trumedia_movie.cfg
-etc/soundimage/srsfx_trumedia_music_wide.cfg
-etc/soundimage/srsfx_trumedia_music.cfg
-etc/soundimage/srsfx_trumedia_voice.cfg
 
 # Firmware
 etc/firmware/leia_pfp_470.fw
