@@ -2,6 +2,7 @@
 bin/charging
 bin/htc_ebdlogd
 bin/htcbatt
+bin/ip6tables
 bin/load-modem.sh
 bin/logcat2
 bin/mpdecision
@@ -54,6 +55,7 @@ lib/libidl.so
 lib/libdsi_netctrl.so
 lib/libdsutils.so
 lib/libgemini.so
+lib/libgsl.so
 lib/libhtc_acoustic.so
 lib/libhtc_ril.so
 lib/libmmipl.so
