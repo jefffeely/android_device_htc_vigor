@@ -1,5 +1,3 @@
-import init.usb.rc
-
 on early-init
     # Set init and its forked children's oom_adj.
     write /proc/1/oom_adj -16
@@ -8,7 +6,6 @@ on early-init
 
 # create mountpoints
     mkdir /mnt 0775 root system
-    mkdir /mnt/sdcard 0000 system system
 
 on init
 
@@ -20,10 +17,10 @@ loglevel 3
     export PATH /sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin
     export LD_LIBRARY_PATH /vendor/lib:/system/lib
     export ANDROID_BOOTLOGO 1
+    export ANDROID_CACHE /cache
     export ANDROID_ROOT /system
     export ANDROID_ASSETS /system/app
     export ANDROID_DATA /data
-    export EXTERNAL_STORAGE /mnt/sdcard
     export ASEC_MOUNTPOINT /mnt/asec
     export LOOP_MOUNTPOINT /mnt/obb
     export BOOTCLASSPATH /system/framework/core.jar:/system/framework/core-junit.jar:/system/framework/bouncycastle.jar:/system/framework/ext.jar:/system/framework/framework.jar:/system/framework/android.policy.jar:/system/framework/services.jar:/system/framework/apache-xml.jar:/system/framework/filterfw.jar
@@ -31,7 +28,6 @@ loglevel 3
 # Backward compatibility
     symlink /system/etc /etc
     symlink /sys/kernel/debug /d
-    symlink /mnt/sdcard /sdcard
 
 # Right now vendor lives on the same filesystem as system,
 # but someday that may change.
@@ -44,7 +40,7 @@ loglevel 3
 
     mkdir /system
     mkdir /data 0771 system system
-    mkdir /cache 0770 system cache
+    mkdir /cache 0771 system cache
     mkdir /config 0500 root root
 
     # Directory for putting things only root should see.
@@ -64,9 +60,6 @@ loglevel 3
     # Filesystem image public mount points.
     mkdir /mnt/obb 0700 root system
     mount tmpfs tmpfs /mnt/obb mode=0755,gid=1000
-
-    mkdir /app-cache 0700 root system
-    mount tmpfs tmpfs /app-cache size=8m,mode=0755,gid=1000
 
     write /proc/sys/kernel/panic_on_oops 1
     write /proc/sys/kernel/hung_task_timeout_secs 0
@@ -114,7 +107,7 @@ on post-fs
 
     # We chown/chmod /cache again so because mount is run as root + defaults
     chown system cache /cache
-    chmod 0770 /cache
+    chmod 0771 /cache
 
     # This may have been created by the recovery system with odd permissions
     chown system cache /cache/recovery
@@ -171,10 +164,15 @@ on post-fs-data
     mkdir /data/app-private 0771 system system
     mkdir /data/app 0771 system system
     mkdir /data/property 0700 root root
-    mkdir /data/radio 0770 radio radio
 
-    # create dalvik-cache, so as to enforce our permissions
+    # create dalvik-cache and double-check the perms, so as to enforce our permissions
     mkdir /data/dalvik-cache 0771 system system
+    chown system system /data/dalvik-cache
+    chmod 0771 /data/dalvik-cache
+
+    mkdir /cache/dalvik-cache 0771 system system
+    chown system system /cache/dalvik-cache
+    chmod 0771 /cache/dalvik-cache
 
     # create resource-cache and double-check the perms
     mkdir /data/resource-cache 0771 system system
@@ -187,41 +185,19 @@ on post-fs-data
     # create directory for DRM plug-ins
     mkdir /data/drm 0774 drm drm
 
+    # If there is no fs-post-data action in the init.<device>.rc file, you
+    # must uncomment this line, otherwise encrypted filesystems
+    # won't work.
+    # Set indication (checked by vold) that we have finished this action
+    #setprop vold.post_fs_data_done 1
+
     chown system system /sys/class/android_usb/android0/f_mass_storage/lun/file
     chmod 0660 /sys/class/android_usb/android0/f_mass_storage/lun/file
     chown system system /sys/class/android_usb/android0/f_rndis/ethaddr
     chmod 0660 /sys/class/android_usb/android0/f_rndis/ethaddr
 
-    # HTC add: 3LM setting on ICS
-    setprop ro.3lm.production 1
-
-    # HTC add: 3LM encryption on ICS
-    setprop ro.3lm.legacy_encryption 1
-    mkdir /data/secure 0755 system system
-    mkdir /data/secure/data 0755 system system
-    mount tmpfs tmpfs /data/secure/data mode=0755,gid=1000
-
-    chown system system /sys/class/graphics/fb0/ratelimit
-
-    # If there is no fs-post-data action in the init.<device>.rc file, you
-    # must uncomment this line, otherwise encrypted filesystems
-    # won't work.
-    # Set indication (checked by vold) that we have finished this action
-    setprop vold.post_fs_data_done 1
-
-    # allow system to modify cpufreq control files
-    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-    chown root system /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
-    chmod 0664 /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
-    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-    chown root system /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
-    chmod 0664 /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
-    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-    chown root system /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
-    chmod 0664 /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
+# Include extra init file
+    import /system/etc/init.local.rc
 
 on boot
 # basic network init
@@ -231,7 +207,6 @@ on boot
 
 # set RLIMIT_NICE to allow priorities from 19 to -20
     setrlimit 13 40 40
-    setrlimit 8 268435456 268435456
 
 # Memory management.  Basic kernel parameters, and allow the high
 # level system server to be able to adjust the kernel OOM driver
@@ -245,9 +220,7 @@ on boot
 
     # Tweak background writeout
     write /proc/sys/vm/dirty_expire_centisecs 200
-    write /proc/sys/vm/dirty_background_bytes 1024000
-    write /proc/sys/vm/dirty_bytes 10240000
-    write /proc/sys/vm/highmem_is_dirtyable 1
+    write /proc/sys/vm/dirty_background_ratio  5
 
     # Permissions for System Server and daemons.
     chown radio system /sys/android_power/state
@@ -258,14 +231,6 @@ on boot
     chown radio system /sys/power/state
     chown radio system /sys/power/wake_lock
     chown radio system /sys/power/wake_unlock
-    chmod 0444 /sys/android_camera/fps_mode
-    chmod 0660 /sys/android_camera2/htcwc
-    chown media system /sys/android_camera2/htcwc
-    chown media system /sys/android_camera/cam3Dmode
-    chown radio system /sys/camera_led_status/led_ril_status
-    chown system system /sys/camera_led_status/led_wimax_status
-    chown system system /sys/camera_led_status/led_hotspot_status
-    chown media system /sys/android_camera/cam_mode
     chmod 0660 /sys/power/state
     chmod 0660 /sys/power/wake_lock
     chmod 0660 /sys/power/wake_unlock
@@ -295,74 +260,37 @@ on boot
     chown system system /sys/kernel/ipv4/tcp_rmem_def
     chown system system /sys/kernel/ipv4/tcp_rmem_max
     chown root radio /proc/cmdline
-# HTC SSD Peripheral UI - BEGIN
-    chown system system /sys/class/leds/red/brightness
-    chown system system /sys/class/leds/red/blink
-    chown system system /sys/class/leds/red/off_timer
-    chown system system /sys/class/leds/green/brightness
-    chown system system /sys/class/leds/green/blink
-    chown system system /sys/class/leds/green/off_timer
-    chown system system /sys/class/leds/blue/brightness
-    chown system system /sys/class/leds/blue/blink
-    chown system system /sys/class/leds/blue/off_timer
-    chown system system /sys/class/leds/amber/brightness
-    chown system system /sys/class/leds/amber/blink
-    chown system system /sys/class/leds/amber/off_timer
-    chown system system /sys/class/leds/button-backlight-portrait/brightness
-    chown system system /sys/class/leds/button-backlight-landscape/brightness
-    chown system system /sys/class/leds/amber-portrait/brightness
-    chown system system /sys/class/leds/green-portrait/brightness
-    chown system system /sys/class/leds/blue-portrait/brightness
-    chown system system /sys/class/leds/amber-landscape/brightness
-    chown system system /sys/class/leds/green-landscape/brightness
-    chown system system /sys/class/leds/blue-landscape/brightness
-    chown system system /sys/class/leds/sharekey/brightness
-    chown system system /sys/class/leds/sharekey/breath_times
-    chown system system /sys/class/leds/sharekey/breath_max_brightness
-    chown system system /sys/class/leds/charming-led/brightness
-    chown system system /sys/class/leds/charming-led/blink
-    chown system system /sys/class/leds/charming-led/off_timer
-    chown system system /sys/class/leds/flashlight/brightness
-    chown system system /sys/class/leds/caps/brightness
-    chown system system /sys/class/leds/func/brightness
-    chown media media /sys/class/leds/green-camera/brightness
-    chown system system /sys/devices/virtual/htc_accessory/fm/flag
-    chown system system /sys/devices/virtual/htc_accessory/tty/flag
-    chown system system /sys/class/switch/dock/dmb_wakeup
-# HTC SSD Peripheral UI - END
 
-#set diag permissions
-    chown radio radio /dev/diag
-    chown radio radio /dev/diag_mdm
-    chown radio radio /dev/htcdiag
-    chown radio radio /dev/diag_arm9
-    chown radio radio /dev/btdiag
-    chmod 0660 /dev/diag
-    chmod 0660 /dev/diag_mdm
-    chmod 0660 /dev/htcdiag
-    chmod 0660 /dev/diag_arm9
-    chmod 0660 /dev/btdiag
+    # allow system to modify cpufreq control files
+    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
 
 # Define TCP buffer sizes for various networks
 #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
     setprop net.tcp.buffersize.default 4096,87380,110208,4096,16384,110208
-    setprop net.tcp.buffersize.wifi    4095,87380,110208,4096,16384,110208
-    setprop net.tcp.buffersize.hsdpa   4094,87380,704512,4096,16384,110208
-    setprop net.tcp.buffersize.umts    4094,87380,704512,4096,16384,110208
-    setprop net.tcp.buffersize.edge    4093,26280,704512,4096,16384,35040
-    setprop net.tcp.buffersize.gprs    4092,8760,704512,4096,8760,11680
-    setprop net.tcp.buffersize.lte     4096,221184,3461120,4096,221184,3461120
-    setprop net.tcp.buffersize.evdo_b  4094,87380,262144,4096,16384,262144
-    setprop net.tcp.buffersize.wimax   4096,221184,524288,4096,16384,110208
+    setprop net.tcp.buffersize.wifi    524288,1048576,2097152,262144,524288,1048576
+    setprop net.tcp.buffersize.lte     524288,1048576,2097152,262144,524288,1048576
+    setprop net.tcp.buffersize.umts    4094,87380,110208,4096,16384,110208
+    setprop net.tcp.buffersize.hspa    4094,87380,262144,4096,16384,262144
+    setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
+    setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
 
-    # Assign TCP buffer thresholds to be ceiling value of technology maximums
-    # Increased technology maximums should be reflected here.
-    write /proc/sys/net/core/rmem_max  262144
-    write /proc/sys/net/core/wmem_max  262144
+# allow system to modify ksm control files
+    chown root system /sys/kernel/mm/ksm/pages_to_scan
+    chmod 0664 /sys/kernel/mm/ksm/pages_to_scan
+    chown root system /sys/kernel/mm/ksm/sleep_millisecs
+    chmod 0664 /sys/kernel/mm/ksm/sleep_millisecs
+    chown root system /sys/kernel/mm/ksm/run
+    chmod 0664 /sys/kernel/mm/ksm/run
+    write /sys/kernel/mm/ksm/sleep_millisecs 1500
+    write /sys/kernel/mm/ksm/pages_to_scan 256
 
 # Set this property so surfaceflinger is not started by system_init
     setprop system_init.startsurfaceflinger 0
-
 
 # Run sysinit
     exec /system/bin/sysinit
@@ -396,6 +324,49 @@ on property:vold.decrypt=trigger_shutdown_framework
     class_reset late_start
     class_reset main
 
+# Used to disable USB when switching states
+on property:sys.usb.config=none
+    stop adbd
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/bDeviceClass 0
+    setprop sys.usb.state $sys.usb.config
+
+# adb only USB configuration
+# This should only be used during device bringup
+# and as a fallback if the USB manager fails to set a standard configuration
+on property:sys.usb.config=adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18d1
+    write /sys/class/android_usb/android0/idProduct D002
+    write /sys/class/android_usb/android0/functions $sys.usb.config
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state $sys.usb.config
+
+# USB accessory configuration
+on property:sys.usb.config=accessory
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18d1
+    write /sys/class/android_usb/android0/idProduct 2d00
+    write /sys/class/android_usb/android0/functions $sys.usb.config
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state $sys.usb.config
+
+# USB accessory configuration, with adb
+on property:sys.usb.config=accessory,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18d1
+    write /sys/class/android_usb/android0/idProduct 2d01
+    write /sys/class/android_usb/android0/functions $sys.usb.config
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state $sys.usb.config
+
+# Used to set USB configuration at boot and to switch the configuration
+# when changing the default configuration
+on property:persist.sys.usb.config=*
+    setprop sys.usb.config $persist.sys.usb.config
+
 ## Daemon processes to be run by init.
 ##
 service ueventd /sbin/ueventd
@@ -419,11 +390,6 @@ service adbd /sbin/adbd
 
 # adbd on at boot in emulator
 on property:ro.kernel.qemu=1
-    start adbd
-
-# Adb over Network
-on property:service.adb.tcp.port=5555
-    stop adbd
     start adbd
 
 # This property trigger has added to imitiate the previous behavior of "adb root".
@@ -465,9 +431,8 @@ service ril-daemon /system/bin/rild
     class main
     socket rild stream 660 root radio
     socket rild-debug stream 660 radio system
-    socket rild-htc stream 660 radio system
     user root
-    group radio cache inet misc audio sdcard_rw log
+    group radio cache inet misc audio sdcard_rw qcom_oncrpc diag
 
 service surfaceflinger /system/bin/surfaceflinger
     class main
@@ -491,13 +456,13 @@ service drm /system/bin/drmserver
 service media /system/bin/mediaserver
     class main
     user media
-    group audio camera inet net_bt net_bt_admin net_bw_acct drmrpc cw_access oma_drm_group
+    group audio camera inet net_bt net_bt_admin net_bw_acct drmrpc
     ioprio rt 4
 
 service bootanim /system/bin/bootanimation
     class main
     user graphics
-    group system audio graphics cw_access
+    group graphics
     disabled
     oneshot
 
@@ -515,7 +480,6 @@ service bluetoothd /system/bin/bluetoothd -n
     # let bluetoothd drop uid to bluetooth with the right linux capabilities
     group bluetooth net_bt_admin misc
     disabled
-    oneshot
 
 service installd /system/bin/installd
     class main
@@ -549,37 +513,11 @@ service dumpstate /system/bin/dumpstate -s
     disabled
     oneshot
 
-service ipd /system/bin/ipd
-    socket ipd stream 660 root radio
+# adb over network
+on property:service.adb.tcp.port=5555
+    stop adbd
+    start adbd
+on property:service.adb.tcp.port=-1
+    stop adbd
+    start adbd
 
-on property:dev.bootcomplete=1
-    start bootcomplete
-
-service bootcomplete /system/bin/bootcomplete
-    user root
-    group root
-    disabled
-    oneshot
-
-service shutdown /system/bin/shutdown
-    user root
-    group root
-    disabled
-    oneshot
-
-service charging /system/bin/charging
-    user root
-    group root
-    disabled
-    oneshot
-
-# HTC add: 3LM service default launched on ICS
-service tund /system/bin/tund
-    socket tund stream 0660 vpn system
-    user vpn
-    group vpn net_admin net_raw
-    ioprio be 2
-
-service post-boot /system/bin/sh /system/etc/init.post_boot.sh
-    user root
-    oneshot

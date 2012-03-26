@@ -17,6 +17,7 @@
 VENDOR=htc
 DEVICE=vigor
 OUTDIR=vendor/$VENDOR/$DEVICE
+BOOTANI=vendor/cm
 MAKEFILE=../../../$OUTDIR/$DEVICE-vendor-blobs.mk
 
 (cat << EOF) > $MAKEFILE
@@ -40,6 +41,9 @@ MAKEFILE=../../../$OUTDIR/$DEVICE-vendor-blobs.mk
 PRODUCT_COPY_FILES += \\
   $OUTDIR/proprietary/lib/libaudioalsa.so:obj/lib/libaudioalsa.so \\
   $OUTDIR/proprietary/lib/libril.so:obj/lib/libril.so \\
+  $BOOTANI/prebuilt/common/bootanimation/vertical-720x1280.zip:obj/media/bootanimation.zip \\
+  
+  
 
 PRODUCT_COPY_FILES += \\
 EOF
