@@ -12,12 +12,14 @@ bin/rmt_storage
 bin/qmuxd
 bin/thermald
 bin/wpa_supplicant
+bin/vold
 xbin/wireless_modem
 
 # Configuration files
 etc/agps_rm
 etc/thermald.conf
 etc/vpimg
+etc/vold.fstab
 
 # Camera Files
 lib/libchromatix_imx105_default_video.so
@@ -80,7 +82,6 @@ lib/libaudcal.so
 lib/libC2D2.so
 lib/libcamerapp.so
 lib/libcameraface.so
-lib/libcameraservice.so
 lib/libdiag.so
 lib/libidl.so
 lib/libdsi_netctrl.so
@@ -91,8 +92,6 @@ lib/libhtc_acoustic.so
 lib/libhtc_ril.so
 lib/libmmipl.so
 lib/libmmjpeg.so
-lib/libmpl.so
-lib/libmllite.so
 lib/libnetmgr.so
 lib/liboemcamera.so
 lib/libOlaEngine.so
@@ -107,9 +106,17 @@ lib/libv8.so
 lib/libril-qc-qmi-1.so
 lib/libril-qcril-hook-oem.so
 lib/libril.so
-
+lib/libdivxdrmdecrypt.so
+lib/libOmxCore.so
+lib/libOmxVdec.so
+lib/libOmxVenc.so
+lib/libstagefrighthw.so
 
 # Hardware files
 lib/hw/sensors.vigor.so
 lib/hw/camera.default.so
 lib/hw/lights.msm8660.so
+lib/mpl_jni.so
+lib/mlplatform.so
+lib/libmpl.so
+lib/libmllite.so
