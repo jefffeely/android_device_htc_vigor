@@ -116,7 +116,7 @@ lib/libstagefrighthw.so
 lib/hw/sensors.vigor.so
 lib/hw/camera.default.so
 lib/hw/lights.msm8660.so
-lib/mpl_jni.so
-lib/mlplatform.so
+lib/libmpl_jni.so
+lib/libmlplatform.so
 lib/libmpl.so
 lib/libmllite.so
