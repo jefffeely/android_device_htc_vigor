@@ -83,11 +83,11 @@ PRODUCT_COPY_FILES += \
 
 ## qcom/media
 PRODUCT_PACKAGES += \
-    libstagefrighthw \
-    libOmxCore \
-    libOmxVdec \
-    libOmxVenc \
-    libdivxdrmdecrypt
+   libstagefrighthw \
+   # libOmxCore \
+   # libOmxVdec \
+   # libOmxVenc \
+   # libdivxdrmdecrypt
 
 ## misc
 PRODUCT_PACKAGES += \
@@ -126,7 +126,9 @@ PRODUCT_COPY_FILES += \
     device/htc/vigor/dsp/soundimage/srsfx_trumedia_51.cfg:system/etc/soundimage/srsfx_trumedia_51.cfg \
     device/htc/vigor/dsp/soundimage/srsfx_trumedia_movie.cfg:system/etc/soundimage/srsfx_trumedia_movie.cfg \
     device/htc/vigor/dsp/soundimage/srsfx_trumedia_music.cfg:system/etc/soundimage/srsfx_trumedia_music.cfg \
-    device/htc/vigor/dsp/soundimage/srs_geq10.cfg:system/etc/soundimage/srs_geq10.cfg
+    device/htc/vigor/dsp/soundimage/srs_geq10.cfg:system/etc/soundimage/srs_geq10.cfg \
+    device/htc/vigor/prebuilt/audio/libacdbloader.so:obj/lib/libacdbloader.so \
+    device/htc/vigor/prebuilt/audio/libacdbmapper.so:obj/lib/libacdbmapper.so
 
 ## Keylayouts and Keychars
 PRODUCT_COPY_FILES += \
@@ -200,6 +202,11 @@ $(call inherit-product, frameworks/base/build/phone-hdpi-512-dalvik-heap.mk)
 
 $(call inherit-product, build/target/product/full_base_telephony.mk)
 
+# Audio
+
+PRODUCT_PACKAGES += \
+audio_policy.msm8660 \
+audio.primary.msm8660 
 
 PRODUCT_NAME := htc_vigor
 PRODUCT_DEVICE := vigor

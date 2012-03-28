@@ -92,6 +92,8 @@ lib/libhtc_acoustic.so
 lib/libhtc_ril.so
 lib/libmmipl.so
 lib/libmmjpeg.so
+lib/libmpl.so
+lib/libmllite.so
 lib/libnetmgr.so
 lib/liboemcamera.so
 lib/libOlaEngine.so
@@ -111,6 +113,7 @@ lib/libOmxCore.so
 lib/libOmxVdec.so
 lib/libOmxVenc.so
 lib/libstagefrighthw.so
+
 
 # Hardware files
 lib/hw/sensors.vigor.so
