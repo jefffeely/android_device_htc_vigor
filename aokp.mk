@@ -1,9 +1,10 @@
 $(call inherit-product, device/htc/vigor/vigor.mk)
 
-# Inherit some common CM stuff.
-$(call inherit-product, vendor/cm/config/common_full_phone.mk)
+$(call inherit-product, vendor/aokp/configs/common.mk)
 
-PRODUCT_NAME := cm_vigor
+$(call inherit-product, vendor/aokp/configs/common_versions.mk)
+
+PRODUCT_NAME := aokp_vigor
 PRODUCT_DEVICE := vigor
 PRODUCT_MODEL := PG86100
 PRODUCT_MANUFACTURER := HTC
@@ -12,4 +13,3 @@ TARGET_BOOTANIMATION_NAME := vertical-720x1280
 
 # Release name and versioning
 PRODUCT_RELEASE_NAME := Vigor
--include vendor/cm/config/common_versions.mk

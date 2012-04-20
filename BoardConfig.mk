@@ -76,6 +76,19 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 BOARD_CUSTOM_GRAPHICS := ../../../device/htc/vigor/recovery/graphics.c
 TARGET_RELEASETOOLS_EXTENSIONS := device/htc/common
 
+BOARD_WPA_SUPPLICANT_DRIVER := WEXT
+WPA_SUPPLICANT_VERSION      := VER_0_8_X
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_wext
+BOARD_HOSTAPD_DRIVER        := WEXT
+BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_wext
+BOARD_WLAN_DEVICE           := bcm4330
+WIFI_DRIVER_FW_PATH_PARAM   := "/sys/module/bcmdhd/parameters/firmware_path"
+WIFI_DRIVER_MODULE_PATH     := "/system/lib/modules/bcmdhd.ko"
+WIFI_DRIVER_FW_PATH_STA     := "/system/etc/firmware/fw_bcm4330_b2.bin"
+WIFI_DRIVER_FW_PATH_AP      := "/system/etc/firmware/fw_bcm4330_apsta_b2.bin"
+WIFI_DRIVER_MODULE_NAME     := "bcm4330"
+WIFI_DRIVER_MODULE_ARG      := "firmware_path=/system/etc/firmware/fw_bcm4330_b2.bin iface_name=wlan0"
+
 TARGET_PREBUILT_KERNEL := device/htc/vigor/kernel
 
 TARGET_RECOVERY_INITRC := device/htc/vigor/recovery/init.rc
