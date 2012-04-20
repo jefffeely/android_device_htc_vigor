@@ -86,7 +86,7 @@ WIFI_DRIVER_FW_PATH_PARAM   := "/sys/module/bcmdhd/parameters/firmware_path"
 WIFI_DRIVER_MODULE_PATH     := "/system/lib/modules/bcmdhd.ko"
 WIFI_DRIVER_FW_PATH_STA     := "/system/etc/firmware/fw_bcm4330_b2.bin"
 WIFI_DRIVER_FW_PATH_AP      := "/system/etc/firmware/fw_bcm4330_apsta_b2.bin"
-WIFI_DRIVER_MODULE_NAME     := "bcm4330"
+WIFI_DRIVER_MODULE_NAME     := "bcmdhd"
 WIFI_DRIVER_MODULE_ARG      := "firmware_path=/system/etc/firmware/fw_bcm4330_b2.bin iface_name=wlan0"
 
 TARGET_PREBUILT_KERNEL := device/htc/vigor/kernel
