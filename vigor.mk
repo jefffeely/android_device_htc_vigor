@@ -95,11 +95,6 @@ PRODUCT_PACKAGES += \
     librs_jni \
     com.android.future.usb.accessory
 
-## cm dsp manager
-PRODUCT_PACKAGES += \
-    DSPManager \
-    libcyanogen-dsp
-
 ## dsp Audio
 PRODUCT_COPY_FILES += \
     device/htc/vigor/dsp/AdieHWCodec.csv:system/etc/AdieHWCodec.csv \
