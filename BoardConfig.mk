@@ -25,10 +25,10 @@
 # against the traditional rules of inheritance).
 
 # inherit from the proprietary version
--include vendor/htc/vigor/BoardConfigVendor.mk
+-include vendor/htc/android_vendor_htc_vigor/BoardConfigVendor.mk
 
 # inherit from common msm8660
--include device/htc/msm8660-common/BoardConfigCommon.mk
+-include device/htc/android_device_htc_msm8660-common/BoardConfigCommon.mk
 
 TARGET_USE_SCORPION_BIONIC_OPTIMIZATION := true
 TARGET_USE_SCORPION_PLD_SET := true
@@ -37,7 +37,7 @@ TARGET_SCORPION_BIONIC_PLDOFFS := 6
 TARGET_SCORPION_BIONIC_PLDSIZE := 128
 
 TARGET_BOOTLOADER_BOARD_NAME := vigor
-TARGET_PROVIDES_LIBRIL := vendor/htc/vigor/proprietary/libril-qc-qmi-1.so
+TARGET_PROVIDES_LIBRIL := vendor/htc/android_device_htc_vigor/proprietary/libril-qc-qmi-1.so
 
 BOARD_KERNEL_BASE := 0x48800000
 BOARD_KERNEL_PAGE_SIZE := 00000800
@@ -73,7 +73,7 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16776192
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1308621824
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 2550136320
 BOARD_FLASH_BLOCK_SIZE := 131072
-BOARD_CUSTOM_GRAPHICS := ../../../device/htc/vigor/recovery/graphics.c
+BOARD_CUSTOM_GRAPHICS := ../../../device/htc/android_device_htc_vigor/recovery/graphics.c
 TARGET_RELEASETOOLS_EXTENSIONS := device/htc/common
 
 # Wifi related defines
@@ -91,9 +91,9 @@ WIFI_DRIVER_FW_PATH_PARAM        := "/sys/module/bcmdhd/parameters/firmware_path
 WIFI_DRIVER_MODULE_NAME          := bcmdhd
 WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/bcmdhd.ko"
 
-TARGET_PREBUILT_KERNEL := device/htc/vigor/kernel
+TARGET_PREBUILT_KERNEL := device/htc/android_device_htc_vigor/kernel
 
-TARGET_RECOVERY_INITRC := device/htc/vigor/recovery/init.rc
+TARGET_RECOVERY_INITRC := device/htc/android_device_htc_vigor/recovery/init.rc
 BOARD_SDCARD_DEVICE_PRIMARY := /dev/block/mmcblk0p37
 BOARD_SDCARD_DEVICE_SECONDARY := /dev/block/mmcblk1p1
 BOARD_SDEXT_DEVICE := /dev/block/mmcblk1p2
