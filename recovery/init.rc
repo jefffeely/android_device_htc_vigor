@@ -9,17 +9,19 @@ on init
 
     symlink /system/etc /etc
     symlink /sbin/busybox /sbin/sh
-
     chmod 0755 /sbin/busybox
 
     mkdir /sdcard
+    mkdir /tmp
     mkdir /system
+#    mkdir /system/lib
     mkdir /data
     mkdir /data/data
     mkdir /cache
     mkdir /mtdcache
     mkdir /devlog
     mkdir /internal_sdcard
+    mkdir /sd-ext
     mount /tmp /tmp tmpfs
 
 on boot
@@ -37,6 +39,7 @@ service choice_fn /sbin/choice_fn
 oneshot
 
 service recovery /sbin/recovery
+disabled
 
 service power_test /sbin/power_test
 disabled
