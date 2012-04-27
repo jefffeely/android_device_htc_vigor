@@ -1,5 +1,5 @@
 #
-# system.prop for device
+# system.prop for a sprint device
 #
 
 debug.fb.rgb565 = 0
