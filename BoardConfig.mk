@@ -41,7 +41,9 @@ TARGET_PROVIDES_LIBRIL := vendor/htc/android_device_htc_vigor/proprietary/libril
 
 BOARD_KERNEL_BASE := 0x48800000
 BOARD_KERNEL_PAGE_SIZE := 00000800
-BOARD_KERNEL_CMDLINE := console=ttyHSL3 androidboot.hardware=vigor no_console_suspend=1 
+
+#adding USB console output during boot for debug
+BOARD_KERNEL_CMDLINE := console=ttyUSB0 androidboot.hardware=vigor no_console_suspend=1 
 
 BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := vigor
 #BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 50000
